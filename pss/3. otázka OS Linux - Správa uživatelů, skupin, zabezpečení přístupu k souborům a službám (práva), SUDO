@@ -1,0 +1,64 @@
+Fyzická vrstva (Physical Layer) je základním stavebním kamenem modelu OSI. Jejím hlavním úkolem je zajistit nekontrolovaný přenos surových bitů přes fyzické médium. Na rozdíl od vyšších vrstev nerozumí struktuře dat (rámcům či paketům), vidí pouze nuly a jedničky transformované do fyzických signálů.
+
+---
+
+## 1. Přenosová média
+Média dělíme podle fyzikálního charakteru na vedená a nevedená:
+
+* **Metalická média:** Využívají elektrický proud.
+    * **TP (Twisted Pair):** Kroucená dvojlinka (UTP – nestíněná, STP – stíněná). Standardem je dnes Cat 6/6a pro 10 Gb/s. Kroucení vodičů minimalizuje přeslechy a elektromagnetickou interferenci.
+    * **Koaxiální kabel:** Dnes spíše v kabelových televizích (DOCSIS) nebo starších topologiích (10Base2).
+* **Optická média:** Využívají světelné impulzy. Jsou imunní vůči rušení a mají obrovskou šířku pásma.
+    * **Single-mode (SM):** Tenké jádro, jeden paprsek, pro dlouhé vzdálenosti (kilometry).
+    * **Multi-mode (MM):** Širší jádro, více paprsků, levnější komponenty (LED/VCSEL), pro krátké vzdálenosti (datová centra).
+* **Bezdrátová média (Wireless):** Přenos pomocí elektromagnetických vln (Wi-Fi, Bluetooth, mikrovlnné spoje).
+
+---
+
+## 2. Signály a kódování dat
+Aby mohl být bit ($0$ nebo $1$) přenesen, musí být reprezentován fyzickou veličinou – **signálem**.
+
+### Kódování (Encoding)
+Určuje, jak se bity mapují na elektrické nebo světelné úrovně:
+* **NRZ (Non-Return-to-Zero):** High napětí = 1, Low = 0. Problém se synchronizací hodin při dlouhých řadách stejných bitů.
+* **Manchester:** Bit je definován **hranou** (přechodem) uprostřed intervalu. (Např. vzestupná hrana = 1, sestupná = 0). Zajišťuje samo-synchronizaci.
+* **4B/5B, 8B/10B:** Skupiny bitů se mapují na delší sekvence, aby se eliminovaly dlouhé řady nul/jedniček a zajistila redundance pro kontrolní mechanismy.
+
+### Modulace
+U analogových kanálů (např. Wi-Fi) se mění parametry nosné vlny: **Amplituda (ASK)**, **Frekvence (FSK)** nebo **Fáze (PSK)**. Kombinací vzniká např. **QAM** (kvadraturní amplitudová modulace).
+
+
+
+---
+
+## 3. Přenosová rychlost a parametry
+V teorii komunikace rozlišujeme dva klíčové pojmy:
+* **Modulační rychlost (Baud):** Počet změn stavu signálu za sekundu.
+* **Přenosová rychlost (Bitrate):** Počet skutečně přenesených bitů za sekundu ($b/s$).
+
+Vztah definuje **Shannon-Hartleyův teorém**, který určuje maximální kapacitu kanálu $C$ v přítomnosti šumu:
+$$C = B \cdot \log_2(1 + \frac{S}{N})$$
+Kde $B$ je šířka pásma (Hz) a $S/N$ je poměr signálu k šumu.
+
+---
+
+## 4. Topologie sítí
+Definují geometrické uspořádání propojení uzlů:
+
+| Topologie | Charakteristika | Výhody / Nevýhody |
+| :--- | :--- | :--- |
+| **Sběrnice (Bus)** | Uzly na jednom kabelu | Levná, ale pád kabelu vyřadí celou síť. |
+| **Hvězda (Star)** | Vše do centrálního prvku (Switch) | Nejčastější (Ethernet). Výpadek kabelu ovlivní jen jeden uzel. |
+| **Kruh (Ring)** | Uzly zapojeny za sebou do kruhu | Deterministický přístup (Token Ring), dnes vzácné. |
+| **Mřížka (Mesh)** | Uzly propojeny navzájem | Extrémní odolnost, vysoká cena (použití v páteřních sítích). |
+
+---
+
+## 5. Detekce chyb na 1. vrstvě
+Ačkoliv opravu chyb a potvrzování (ARQ) řeší primárně 2. a 4. vrstva, fyzická vrstva implementuje základní mechanismy pro rozpoznání nekvalitního signálu:
+* **Využití kódování:** Např. u kódování 4B/5B existují "zakázané" kombinace. Pokud přijímač takovou kombinaci detekuje, ví, že došlo k chybě na médiu.
+* **Prahování:** Detekce kolizí (u polovičního duplexu) pomocí sledování úrovně napětí na lince.
+
+---
+
+**Shrnutí:** Fyzická vrstva definuje mechanické (konektory RJ-45), elektrické (úrovně napětí), funkční a procedurální specifikace pro aktivaci a udržení fyzického spoje.
